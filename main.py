@@ -1,14 +1,11 @@
 import shutil
 from datetime import datetime
 import os
-import sys
- 
+import time
 
 def message(message):
     os.system('notify-send "BackupSoftware" "' + message + '"')
     return
-
-
 
 
 # path to destination directory
@@ -22,7 +19,7 @@ now = datetime.now().strftime("%Y-%m-%d_%H-%M")
 dest_flnm = dest_dir + '/' + format(now)
 
 
-print(sys.platform)
+
 
 isdir = os.path.isdir(dest_flnm)
 if isdir == False:
@@ -41,8 +38,14 @@ if len(files) >= 6:
 
     file_remove_path = os.path.join(dest_dir, files[0])
     shutil.rmtree(file_remove_path, ignore_errors=True)
-    message('sucessfull remove: {} '.format(file_remove_path))
+    message('remove: {} '.format(file_remove_path))
 
 
+time.sleep(5)
+cmd = "udisksctl unmount -b /dev/sdb1"
+os.system(cmd)
+time.sleep(5)
+cmd = "udisksctl power-off -b /dev/sdb"
+os.system(cmd)
 
-
+message('eject device')
